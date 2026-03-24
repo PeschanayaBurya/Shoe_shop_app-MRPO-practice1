@@ -42,6 +42,8 @@
                 <option value="stock_desc">Количество на складе в порядке убывания</option>
             </select>
 
+            <a class="btn-nav" asp-controller="Orders" asp-action="Index">Заказы</a>
+
             @if (canEdit)
             {
                 <a class="btn-accent" asp-controller="Products" asp-action="Create">Добавить товар</a>

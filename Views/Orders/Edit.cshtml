@@ -1,0 +1,75 @@
+@model Shoe_shop_app.Models.OrderEditViewModel
+@{
+    ViewData["Title"] = Model.IsEditMode ? "Редактировать заказ" : "Добавить заказ";
+}
+
+<main class="content-wrapper">
+    <h1>@ViewData["Title"]</h1>
+
+    <section class="toolbar">
+        <a class="btn-nav" asp-controller="Orders" asp-action="Index">Вернуться к заказам</a>
+    </section>
+
+    <div asp-validation-summary="ModelOnly" class="message message-error"></div>
+
+    <form asp-action="@(Model.IsEditMode ? "Edit" : "Create")" method="post" class="product-form">
+        @Html.AntiForgeryToken()
+
+        @if (Model.IsEditMode)
+        {
+            <input asp-for="OrderID" type="hidden" />
+            <div class="form-group">
+                <label asp-for="OrderID"></label>
+                <input asp-for="OrderID" class="form-control" readonly />
+            </div>
+        }
+
+        <div class="form-grid">
+            <div>
+                <div class="form-group">
+                    <label asp-for="PickupCode"></label>
+                    <input asp-for="PickupCode" class="form-control" />
+                    <span asp-validation-for="PickupCode" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StatusID"></label>
+                    <select asp-for="StatusID" asp-items="Model.Statuses" class="form-control">
+                        <option value="">Выбрать статус</option>
+                    </select>
+                    <span asp-validation-for="StatusID" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="PickupAddress"></label>
+                    <input asp-for="PickupAddress" class="form-control" />
+                    <span asp-validation-for="PickupAddress" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div>
+                <div class="form-group">
+                    <label asp-for="OrderDate"></label>
+                    <input asp-for="OrderDate" class="form-control" type="date" />
+                    <span asp-validation-for="OrderDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DeliveryDate"></label>
+                    <input asp-for="DeliveryDate" class="form-control" type="date" />
+                    <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-accent">Сохранить</button>
+            <a class="btn-nav" asp-controller="Orders" asp-action="Index">Закрыть</a>
+        </div>
+    </form>
+</main>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

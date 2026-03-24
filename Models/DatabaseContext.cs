@@ -16,6 +16,8 @@ namespace Shoe_shop_app.Models
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Order> Orders { get; set; } 
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<PickupPoint> PickupPoints { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,10 +29,21 @@ namespace Shoe_shop_app.Models
             modelBuilder.Entity<User>().ToTable("users");
             modelBuilder.Entity<Role>().ToTable("roles");
             modelBuilder.Entity<Order>().ToTable("orders");
+            modelBuilder.Entity<OrderStatus>().ToTable("orderstatuses");
+            modelBuilder.Entity<PickupPoint>().ToTable("pickuppoints");
             modelBuilder.Entity<OrderDetail>().ToTable("orderdetails");
 
             modelBuilder.Entity<Product>()
                 .HasKey(p => p.VendorCode);
+
+            modelBuilder.Entity<Order>()
+                .HasKey(o => o.OrderID);
+
+            modelBuilder.Entity<OrderStatus>()
+                .HasKey(s => s.StatusID);
+
+            modelBuilder.Entity<PickupPoint>()
+                .HasKey(p => p.PickupPointID);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasKey(od => od.OrderDetailID);
@@ -40,6 +53,18 @@ namespace Shoe_shop_app.Models
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(od => od.OrderID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Status)
+                .WithMany(s => s.Orders)
+                .HasForeignKey(o => o.StatusID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.PickupPoint)
+                .WithMany(p => p.Orders)
+                .HasForeignKey(o => o.PickupPointID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)

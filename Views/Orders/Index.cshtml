@@ -1,0 +1,71 @@
+@model IEnumerable<Shoe_shop_app.Models.Order>
+@{
+    ViewData["Title"] = "Orders";
+    bool canEditOrders = ViewBag.CanEditOrders == true;
+}
+
+<main class="content-wrapper">
+    <h1>Заказы</h1>
+
+    <section class="system-messages">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="message message-success"><strong>Info:</strong> @TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="message message-warning"><strong>Warning:</strong> @TempData["WarningMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="message message-error"><strong>Error:</strong> @TempData["ErrorMessage"]</div>
+        }
+    </section>
+
+    <section class="toolbar">
+        <a class="btn-nav" asp-controller="Products" asp-action="Index">Вернуться к каталогу</a>
+        @if (canEditOrders)
+        {
+            <a class="btn-accent" asp-controller="Orders" asp-action="Create">Добавить заказ</a>
+        }
+    </section>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">Список заказов пуст.</div>
+    }
+    else
+    {
+        <div class="orders-list">
+            @foreach (var order in Model)
+            {
+                <article class="order-card">
+                    <div class="order-main">
+                        <div class="order-line"><strong>Артикул заказа:</strong> @order.PickupCode</div>
+                        <div class="order-line"><strong>Статус заказа:</strong> @(order.Status?.StatusName ?? "Not specified")</div>
+                        <div class="order-line"><strong>Адрес пункта выдачи:</strong> @(order.PickupPoint?.FullAddress ?? order.PickupPoint?.Street ?? "Not specified")</div>
+                        <div class="order-line"><strong>Дата заказа:</strong> @order.OrderDate.ToString("dd.MM.yyyy")</div>
+
+                        @if (canEditOrders)
+                        {
+                            <div class="order-actions">
+                                <a class="btn-action" asp-controller="Orders" asp-action="Edit" asp-route-id="@order.OrderID">Редактировать</a>
+                                <form asp-controller="Orders" asp-action="Delete" asp-route-id="@order.OrderID" method="post" onsubmit="return confirm('Delete this order?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn-action btn-danger">Удалить</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="order-delivery">
+                        <div class="order-delivery-title">Дата доставки</div>
+                        <div class="order-delivery-value">
+                            @(order.DeliveryDate.HasValue ? order.DeliveryDate.Value.ToString("dd.MM.yyyy") : "Not specified")
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</main>

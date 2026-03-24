@@ -21,11 +21,14 @@ namespace Shoe_shop_app.Models
         public int? UserID { get; set; }
         
         [Column("pickupcode")]
-        public string PickupCode { get; set; }
+        public string PickupCode { get; set; } = string.Empty;
         
         [Column("statusid")]
         public int? StatusID { get; set; }
+
+        public PickupPoint? PickupPoint { get; set; }
+        public OrderStatus? Status { get; set; }
         
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

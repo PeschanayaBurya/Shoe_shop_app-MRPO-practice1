@@ -54,6 +54,12 @@ body {
     background-color: #fff;
 }
 
+.btn-nav{
+    font-size: 16px !important;
+    display: flex;
+    align-items: center;
+}
+
 .btn-logout:hover,
 .btn-login:hover,
 .btn-nav:hover,
@@ -290,6 +296,59 @@ body {
     background: #fff;
 }
 
+/* Orders */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.order-card {
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.order-main {
+    flex: 1;
+    border-right: 1px solid #ddd;
+    padding: 14px 16px;
+}
+
+.order-line {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.order-actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.order-delivery {
+    width: 240px;
+    padding: 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.order-delivery-title {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.order-delivery-value {
+    font-size: 24px;
+    font-weight: bold;
+}
+
 /* Product form */
 .product-form {
     background-color: #fff;
@@ -430,5 +489,18 @@ h1, h2, h3, h4, h5, h6 {
 
     .form-grid {
         grid-template-columns: 1fr;
+    }
+
+    .order-card {
+        flex-direction: column;
+    }
+
+    .order-main {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .order-delivery {
+        width: 100%;
     }
 }
