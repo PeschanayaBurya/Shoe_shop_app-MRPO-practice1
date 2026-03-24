@@ -1,0 +1,9 @@
+.footer {
+  position: static;
+  width: auto;
+  line-height: normal;
+}
+
+.container {
+  margin-top: 20px;
+}

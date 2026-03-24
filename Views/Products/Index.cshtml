@@ -1,0 +1,59 @@
+@model IEnumerable<Shoe_shop_app.Models.Product>
+@{
+    ViewData["Title"] = "Каталог товаров";
+    bool canManageFilters = ViewBag.CanManageFilters == true;
+    bool canEdit = ViewBag.CanEdit == true;
+    var suppliers = ViewBag.Suppliers as IEnumerable<Shoe_shop_app.Models.Supplier> ?? Enumerable.Empty<Shoe_shop_app.Models.Supplier>();
+}
+
+<main class="content-wrapper">
+    <h1>Каталог товаров</h1>
+
+    <section class="system-messages">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="message message-success"><strong>Info:</strong> @TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="message message-warning"><strong>Warning:</strong> @TempData["WarningMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="message message-error"><strong>Error:</strong> @TempData["ErrorMessage"]</div>
+        }
+    </section>
+
+    @if (canManageFilters)
+    {
+        <section class="toolbar" aria-label="Search and filter panel">
+            <input id="searchInput" type="text" placeholder="Поиск..." class="search-input" />
+
+            <select id="supplierFilter" class="filter-select">
+                <option value="">Все поставщики</option>
+                @foreach (var supplier in suppliers)
+                {
+                    <option value="@supplier.SupplierID">@supplier.Name</option>
+                }
+            </select>
+
+            <select id="sortOrder" class="filter-select">
+                <option value="stock_asc">Количество на складе в порядке возрастания</option>
+                <option value="stock_desc">Количество на складе в порядке убывания</option>
+            </select>
+
+            @if (canEdit)
+            {
+                <a class="btn-accent" asp-controller="Products" asp-action="Create">Добавить товар</a>
+            }
+        </section>
+    }
+
+    <section id="productsContainer" class="products-grid" data-can-manage-filters="@canManageFilters.ToString().ToLower()">
+        @await Html.PartialAsync("_ProductsList", Model)
+    </section>
+</main>
+
+@section Scripts {
+    <script src="~/js/products.js"></script>
+}

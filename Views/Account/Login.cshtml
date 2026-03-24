@@ -1,0 +1,49 @@
+@model Shoe_shop_app.Models.LoginViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Вход в систему";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Обувной магазин</title>
+    <link rel="icon" type="image/x-icon" href="~/img/Icon.ico" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <img src="~/img/Icon.png" alt="Логотип" class="login-logo" />
+            <h1>Вход в систему</h1>
+        </div>
+
+        <form asp-action="Login" method="post" class="login-form">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Login">Логин</label>
+                <input asp-for="Login" class="form-control" placeholder="Введите логин" />
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Пароль</label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="Введите пароль" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-login-submit">Войти</button>
+            <a href="@Url.Action("GuestLogin", "Account")" class="btn-guest">Войти как гость</a>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

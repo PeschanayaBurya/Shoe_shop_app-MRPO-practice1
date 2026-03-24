@@ -1,0 +1,90 @@
+@model IEnumerable<Shoe_shop_app.Models.Product>
+@{
+    bool canEdit = ViewBag.CanEdit == true;
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        Нет найденых товаров для текущих фильтров.
+    </div>
+}
+else
+{
+    @foreach (var product in Model)
+    {
+        var rowClass = string.Empty;
+        if (product.QuantityInStock == 0)
+        {
+            rowClass = "out-of-stock";
+        }
+        else if (product.CurrentDiscount > 15)
+        {
+            rowClass = "high-discount";
+        }
+
+        var finalPrice = product.Price * (1 - product.CurrentDiscount / 100m);
+
+        <article class="product-card @rowClass" data-product-card="true">
+            <div class="product-image">
+                @if (!string.IsNullOrWhiteSpace(product.Photo))
+                {
+                    <img src="~/img/products/@product.Photo" alt="@product.ProductName" />
+                }
+                else
+                {
+                    <img src="~/img/picture.png" alt="No image" class="placeholder" />
+                }
+            </div>
+
+            <div class="product-info">
+                <p class="product-meta">@product.Category?.CategoryName</p>
+                @if (canEdit)
+                {
+                    <h3>
+                        <a class="product-edit-link" asp-controller="Products" asp-action="Edit" asp-route-id="@product.VendorCode">
+                            @product.ProductName
+                        </a>
+                    </h3>
+                }
+                else
+                {
+                    <h3>@product.ProductName</h3>
+                }
+                <p class="description">@product.Description</p>
+                <p class="product-meta">Производитель: @(product.Manufacturer?.Name ?? "Не указано")</p>
+                <p class="product-meta">Поставщик: @(product.Supplier?.Name ?? "Не указано")</p>
+                <p class="product-meta">Цена: @product.Price.ToString("N2") ₽</p>
+                <p class="product-meta">Единица измерения: @(string.IsNullOrWhiteSpace(product.Unit) ? "Не указано" : product.Unit)</p>
+                <p class="product-meta">Количество на складе: @product.QuantityInStock</p>
+            </div>
+
+            <div class="price-section">
+                <div class="price-block">
+                    <span class="discount-badge">-@product.CurrentDiscount%</span>
+                    @if (product.CurrentDiscount > 0)
+                    {
+                        <span class="old-price">@product.Price.ToString("N2") ₽</span>
+                        <span class="final-price">@finalPrice.ToString("N2") ₽</span>
+                    }
+                    else
+                    {
+                        <span class="price">@product.Price.ToString("N2") ₽</span>
+                    }
+                </div>
+
+                @if (canEdit)
+                {
+                    <div class="admin-actions">
+                        <a class="btn-action" asp-controller="Products" asp-action="Edit" asp-route-id="@product.VendorCode">Редактировать</a>
+                        <form asp-controller="Products" asp-action="Delete" method="post" onsubmit="return confirm('Удалить этот товар?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="vendorCode" value="@product.VendorCode" />
+                            <button type="submit" class="btn-action btn-danger">Удалить</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </article>
+    }
+}

@@ -1,0 +1,6 @@
+# Папки с бинарными файлами
+bin/
+obj/
+
+# Файлы конфигурации с паролями
+appsettings.Development.json

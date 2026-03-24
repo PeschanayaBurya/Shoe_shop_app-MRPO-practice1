@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Обувной магазин</title>
+    <script type="importmap"></script>
+    <link rel="icon" type="image/x-icon" href="~/img/Icon.ico">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Shoe_shop_app.styles.css" asp-append-version="true" />
+</head>
+<body>
+    @{
+        var roleId = ViewBag.UserRoleId is int role ? role : Shoe_shop_app.Models.AppRoles.GuestId;
+        var userName = ViewBag.UserFullName as string ?? "Guest";
+
+        if (userName == "Guest")
+        {
+            userName = "Гость";
+        }
+    }
+
+    <header class="header">
+        <div class="name-shop">
+            <div class="logo">
+                <img src="~/img/Icon.png" alt="Company logo" class="header-logo" />
+            </div>
+            <div>Обувной магазин</div>
+        </div>
+        <div class="user-info">
+            <span>@userName</span>
+            @if (roleId != Shoe_shop_app.Models.AppRoles.GuestId)
+            {
+                <a href="@Url.Action("Logout", "Account")" class="btn-nav">Выход</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Login", "Account")" class="btn-nav">Вход</a>
+            }
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
